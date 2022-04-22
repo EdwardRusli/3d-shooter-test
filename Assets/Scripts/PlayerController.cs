@@ -1,4 +1,4 @@
-    using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour
         meshRenderer = GetComponentInChildren<MeshRenderer>();
         meshRenderer.material = normalMaterial;
         Cursor.lockState = CursorLockMode.Locked;
-        StartCoroutine(InvincibilityHandler());
+        StartCoroutine(InvincibilityHandler()); 
     }
     
 
