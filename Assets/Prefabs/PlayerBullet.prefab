@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6558081408085217731}
   - component: {fileID: 6829634120487597693}
   - component: {fileID: 9016405066283122573}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: PlayerBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -112,4 +112,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.5
   targetTag: Enemy
-  damage: 50
+  damage: 10

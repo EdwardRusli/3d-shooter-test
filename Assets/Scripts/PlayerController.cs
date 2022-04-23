@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Pool;
 public class PlayerController : MonoBehaviour
 {
-    
     //Controls
     private float horizontalInput;
     private float verticalInput;
@@ -18,6 +17,7 @@ public class PlayerController : MonoBehaviour
     //Mouse Aim
     private float mouseX;
     public float mouseSensitivity;
+    public GameObject crosshairSprite;
 
     //References
     private Rigidbody rb;
@@ -110,7 +110,6 @@ public class PlayerController : MonoBehaviour
         //Fire Bullet
         if(Input.GetKeyDown(fireButton))
         {
-            print("fire button pressed");
             StartCoroutine(fireBullet());
         }
 
@@ -132,6 +131,20 @@ public class PlayerController : MonoBehaviour
 
         //Mouse Look
         transform.Rotate(0, mouseX * mouseSensitivity, 0);
+
+        //Check if looking at target
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity) && hit.transform.tag == "Enemy")
+        {
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
+            Vector3 targetPositionInScreenSpace = Camera.main.WorldToScreenPoint(hit.point);
+            crosshairSprite.SetActive(true);
+            crosshairSprite.transform.position = targetPositionInScreenSpace;
+        }
+        else
+        {
+            crosshairSprite.SetActive(false);
+        }
 
         if(health <= 0)
         {

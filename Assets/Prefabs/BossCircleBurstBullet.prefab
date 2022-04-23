@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6558081408085217731}
   - component: {fileID: 6829634120487597693}
   - component: {fileID: 3590820923184800182}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: BossCircleBurstBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

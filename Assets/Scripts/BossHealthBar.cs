@@ -22,7 +22,6 @@ public class BossHealthBar : MonoBehaviour
     void FixedUpdate()
     {
         bossCurrentHealth = bossController.health;
-        print(bossCurrentHealth/bossInitialHealth);
         image.fillAmount = bossCurrentHealth/bossInitialHealth;
         bossHealthText.text = string.Format("{0} / {1}", bossCurrentHealth, bossInitialHealth);
     }

@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class PlayerBullet : MonoBehaviour
 {
-    private PlayerController playerController;
-    private GameObject playerCharacter;
+    private ObjectPool<GameObject> playerBulletPool;
     public float speed;
     public string targetTag; //What tag does the target/enemy have?
     public int damage; //How much damage will the bullet deal on the target/enemy?
@@ -16,12 +16,15 @@ public class PlayerBullet : MonoBehaviour
     }
     void KillBullet()
     {
-        playerController.returnBulletToPool(gameObject);
+        playerBulletPool.Release(gameObject);
     }
+    void Start()
+    {
+        playerBulletPool = GameObject.Find("Object Pooler").GetComponent<ObjectPoolController>().playerBulletPool;
+    }
+
     void OnEnable()
     {
-        playerCharacter = GameObject.Find("Player");
-        playerController = playerCharacter.GetComponent<PlayerController>();
         StartCoroutine(DespawnBullet());
     }
 
@@ -36,7 +39,6 @@ public class PlayerBullet : MonoBehaviour
         {
             BossController bossController = other.GetComponent<BossController>();
             bossController.TakeDamage(damage);
-            print("Target has " + bossController.health + " health remaining.");
             bossController.invincibilityTimer += 0.05f;
             KillBullet();
         }

@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class BossCircleBurstBullet : MonoBehaviour
 {
-    private BossController bossController;
+    private ObjectPool<GameObject> circleBurstBossBulletPool;
     public float speed;
     public string targetTag; //What tag does the target/enemy have?
     public int damage; //How much damage will the bullet deal on the target/enemy?
@@ -15,11 +16,14 @@ public class BossCircleBurstBullet : MonoBehaviour
     }
     void KillBullet()
     {
-        bossController.circleBurstBossBulletPool.Release(gameObject);
+        circleBurstBossBulletPool.Release(gameObject);
+    }
+    void Start()
+    {
+        circleBurstBossBulletPool = GameObject.Find("Object Pooler").GetComponent<ObjectPoolController>().circleBurstBossBulletPool;
     }
     void OnEnable()
     {
-        bossController = GameObject.Find("Boss").GetComponent<BossController>();
         StartCoroutine(DespawnBullet());
     }
 
