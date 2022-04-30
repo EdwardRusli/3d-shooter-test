@@ -6,7 +6,7 @@ using UnityEngine.Pool;
 public class ObjectPoolController : MonoBehaviour
 {
     //Player References
-    public ObjectPool<GameObject> playerBulletPool;
+    public ObjectPool<GameObject> playerStandardShotPool;
     public GameObject playerBulletPrefab;
     //Player Properties
     public Vector3 newPlayerBulletPosition;
@@ -21,19 +21,19 @@ public class ObjectPoolController : MonoBehaviour
     public bool bossExists = true;
 
     //Circle Burst Attack
-    public ObjectPool<GameObject> circleBurstBossBulletPool;
+    public ObjectPool<GameObject> bossCircleBurstShotPool;
     public GameObject circleBurstBossBulletPrefab;
 
     
     //Standard Shot
-    public ObjectPool<GameObject> standardShotBossBulletPool;
+    public ObjectPool<GameObject> bossStandardShotPool;
     public GameObject standardShotBossBulletPrefab;
 
     
 
     void Awake()
     {
-        playerBulletPool = new ObjectPool<GameObject>(
+        playerStandardShotPool = new ObjectPool<GameObject>(
             createFunc: () => Instantiate(playerBulletPrefab),
             actionOnGet: (obj) => {obj.SetActive(true); obj.transform.position = newPlayerBulletPosition; obj.transform.rotation = newPlayerBulletRotation;},
             actionOnRelease: (obj) => obj.SetActive(false),
@@ -41,7 +41,7 @@ public class ObjectPoolController : MonoBehaviour
             collectionCheck: false,
             defaultCapacity: 10,
             maxSize: 10);
-        circleBurstBossBulletPool = new ObjectPool<GameObject>(
+        bossCircleBurstShotPool = new ObjectPool<GameObject>(
             createFunc: () => Instantiate(circleBurstBossBulletPrefab),
             actionOnGet: (obj) => {obj.SetActive(true); obj.transform.position = newBossProjectilePosition; obj.transform.rotation = newBossProjectileRotation;},
             actionOnRelease: (obj) => obj.SetActive(false),
@@ -49,7 +49,7 @@ public class ObjectPoolController : MonoBehaviour
             collectionCheck: false,
             defaultCapacity: 10,
             maxSize: 10);
-        standardShotBossBulletPool = new ObjectPool<GameObject>(
+        bossStandardShotPool = new ObjectPool<GameObject>(
             createFunc: () => Instantiate(standardShotBossBulletPrefab),
             actionOnGet: (obj) => {obj.SetActive(true); obj.transform.position = newBossProjectilePosition; obj.transform.rotation = newBossProjectileRotation;},
             actionOnRelease: (obj) => obj.SetActive(false),
@@ -57,5 +57,9 @@ public class ObjectPoolController : MonoBehaviour
             collectionCheck: false,
             defaultCapacity: 10,
             maxSize: 10);
+
+        PlayerStandardShot.playerStandardShotPool = playerStandardShotPool;
+        BossCircleBurstShot.bossCircleBurstShotPool = bossCircleBurstShotPool;
+        BossStandardShot.bossStandardShotPool = bossStandardShotPool;
     }
 }

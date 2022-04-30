@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class BossStandardShotBullet : MonoBehaviour
+public class BossCircleBurstShot : MonoBehaviour
 {
-    private ObjectPool<GameObject> standardShotBossBulletPool;
+    public static ObjectPool<GameObject> bossCircleBurstShotPool;
     public float speed;
     public string targetTag; //What tag does the target/enemy have?
-    public int damage; //How much damage will the bullet deal on the target/enemy?
+    public static float damage;
     IEnumerator DespawnBullet()
     {
         yield return new WaitForSeconds(5);
@@ -16,15 +16,11 @@ public class BossStandardShotBullet : MonoBehaviour
     }
     void KillBullet()
     {
-        standardShotBossBulletPool.Release(gameObject);
+        bossCircleBurstShotPool.Release(gameObject);
     }
-    void Start()
-    {
-        standardShotBossBulletPool = GameObject.Find("Object Pooler").GetComponent<ObjectPoolController>().standardShotBossBulletPool;
-    }
+
     void OnEnable()
     {
-        
         StartCoroutine(DespawnBullet());
     }
 

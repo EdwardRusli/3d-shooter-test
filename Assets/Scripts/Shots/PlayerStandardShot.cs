@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class PlayerBullet : MonoBehaviour
+public class PlayerStandardShot : MonoBehaviour
 {
-    private ObjectPool<GameObject> playerBulletPool;
+    public static ObjectPool<GameObject> playerStandardShotPool;
     public float speed;
     public string targetTag; //What tag does the target/enemy have?
-    public int damage; //How much damage will the bullet deal on the target/enemy?
+    public static float damage;
     IEnumerator DespawnBullet()
     {
         yield return new WaitForSeconds(1);
@@ -16,11 +16,7 @@ public class PlayerBullet : MonoBehaviour
     }
     void KillBullet()
     {
-        playerBulletPool.Release(gameObject);
-    }
-    void Start()
-    {
-        playerBulletPool = GameObject.Find("Object Pooler").GetComponent<ObjectPoolController>().playerBulletPool;
+        playerStandardShotPool.Release(gameObject);
     }
 
     void OnEnable()

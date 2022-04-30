@@ -5,6 +5,7 @@ using UnityEngine.Pool;
 
 public class BossController : MonoBehaviour
 {
+    [Header("References")]
     //References
     private GameObject player;
     private MeshRenderer meshRenderer;
@@ -13,12 +14,17 @@ public class BossController : MonoBehaviour
     public Material normalMaterial;
     public Material invincibleMaterial;
     public GameObject objectPoolerObject;
-    public ObjectPool<GameObject> circleBurstBossBulletPool;
-    public ObjectPool<GameObject> standardShotBossBulletPool;
+    public ObjectPool<GameObject> bossCircleBurstShotPool;
+    public ObjectPool<GameObject> bossStandardShotPool;
+
+
+
 
     #region Health, Damage, and Invincibility
-    public int health;
-    public float invincibilityTimer;
+    [Header("Boss Stats")]
+    public float health;
+
+    [HideInInspector] public float invincibilityTimer;
     private bool invincible;
     IEnumerator InvincibilityHandler()
     {
@@ -39,7 +45,7 @@ public class BossController : MonoBehaviour
         }
     }
     
-    public void TakeDamage(int damageValue)
+    public void TakeDamage(float damageValue)
     {
         if(!invincible)
         {
@@ -57,7 +63,13 @@ public class BossController : MonoBehaviour
 
 
     #region Attack and Bullet Management
-    public float circleAttackCooldownInSeconds;
+
+    [Header("Attack Damage Values")]
+    public float circleBurstShotDamage;
+    public float standardShotDamage;
+
+    [Header("Attack Cooldown Values")]
+    public float circleBurstAttackCooldownInSeconds;
     public float bulletStreamAttackCooldownInSeconds;
     public float bulletStreamBurstCooldownInSeconds;
     void SetNewProjectileTransform(Vector3 origin, Quaternion orientation)
@@ -77,11 +89,11 @@ public class BossController : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
                 for (int i = 0; i < 16; i++)
                 {
+                    BossCircleBurstShot.damage = circleBurstShotDamage;
                     SetNewProjectileTransform(transform.position, Quaternion.Euler(0,(i*22.5f),0)*transform.rotation);
-                    circleBurstBossBulletPool.Get();
+                    bossCircleBurstShotPool.Get();
                 }
-
-                yield return new WaitForSeconds(circleAttackCooldownInSeconds);
+                yield return new WaitForSeconds(circleBurstAttackCooldownInSeconds);
             }
 
             //Bullet Stream Attack
@@ -91,8 +103,9 @@ public class BossController : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0, findYRotationToLookAtTarget(player.transform.position), 0);
                 for (int i = 0; i < 3; i++)
                 {
+                    BossStandardShot.damage = standardShotDamage;
                     SetNewProjectileTransform(transform.position, transform.rotation);
-                    standardShotBossBulletPool.Get();
+                    bossStandardShotPool.Get();
                     yield return new WaitForSeconds(bulletStreamBurstCooldownInSeconds);
                 }
                 yield return new WaitForSeconds(bulletStreamAttackCooldownInSeconds);
@@ -115,8 +128,8 @@ public class BossController : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         meshRenderer = GetComponentInChildren<MeshRenderer>();
         objectPoolController = objectPoolerObject.GetComponent<ObjectPoolController>();
-        circleBurstBossBulletPool = objectPoolController.circleBurstBossBulletPool;
-        standardShotBossBulletPool = objectPoolController.standardShotBossBulletPool;
+        bossCircleBurstShotPool = objectPoolController.bossCircleBurstShotPool;
+        bossStandardShotPool = objectPoolController.bossStandardShotPool;
 
         StartCoroutine(InvincibilityHandler());
         StartCoroutine(StartAttacking());
